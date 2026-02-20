@@ -737,7 +737,7 @@ Exit criteria:
 - replay pass rate and zero-bypass checks pass
 - policy change workflow is measurable and repeatable
 
-## 20) Demo script (interview-grade)
+## 20) Demo script
 
 10-15 minute flow:
 
