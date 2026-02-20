@@ -737,7 +737,7 @@ Exit criteria:
 - replay pass rate and zero-bypass checks pass
 - policy change workflow is measurable and repeatable
 
-## 20) Demo script
+## 20) Operational walkthrough (10–15 minutes)
 
 10-15 minute flow:
 
