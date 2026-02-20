@@ -67,6 +67,7 @@ regulated-ai-control-plane-prototype/
   docs/
     PROTOTYPE_SPEC.md
     LEARNING_PYTHON.md
+    DEMO_SCRIPT.md
   src/
   tests/
   data/
@@ -77,7 +78,22 @@ regulated-ai-control-plane-prototype/
 
 - `docs/PROTOTYPE_SPEC.md` - full build specification, contracts, controls, milestones
 - `docs/LEARNING_PYTHON.md` - build-fast/understand-later learning loop used during implementation
+- `docs/DEMO_SCRIPT.md` - step-by-step walkthrough for interview/demo delivery
 
 ## Current status
 
-Spec and architecture are defined. Implementation is being built in phases (safe intake -> grounding -> governance hardening -> evaluation maturity).
+Spec and architecture are defined, with first implementation modules and unit tests added.
+
+## Implemented modules
+
+- `src/intent_schema.py`: typed `IntentObject` and strict payload validation
+- `src/auditor.py`: deterministic rule evaluation and decision routing
+- `src/token_gateway.py`: signed token issuance and validation
+- `tests/test_auditor_rules.py`: approve/reject/review rule coverage
+- `tests/test_token_validation.py`: signature/expiry/scope validation coverage
+
+## Run tests
+
+```bash
+python3 -m unittest discover -s tests -p "test_*.py"
+```
