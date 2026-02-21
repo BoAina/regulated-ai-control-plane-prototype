@@ -21,8 +21,6 @@ Short definition:
 
 This prototype is the execution proof for your strategy:
 
-- You are not positioning as "AI hobbyist" or model trainer.
-- You are positioning as an HLS solutions engineer who can design and build safe deployment architecture for probabilistic AI in regulated systems.
 - The artifact should demonstrate technical depth (Python/API integration), governance depth (policy/audit/HITL), and deployment realism (failure handling, observability, replay).
 
 ## 3) Business problem statement
