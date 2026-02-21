@@ -86,10 +86,12 @@ Spec and architecture are defined, with first implementation modules and unit te
 
 ## Implemented modules
 
+- `src/governance_module.py`: pluggable governance module interface (`GovernanceModule`, `DecisionResult`, `RuleFinding`)
 - `src/intent_schema.py`: typed `IntentObject` and strict payload validation
-- `src/auditor.py`: deterministic rule evaluation and decision routing
+- `src/auditor.py`: auditor orchestration + grants module adapter + deterministic decision routing
 - `src/token_gateway.py`: signed token issuance and validation
 - `tests/test_auditor_rules.py`: approve/reject/review rule coverage
+- `tests/test_auditor_orchestration.py`: module-driven orchestration behavior coverage
 - `tests/test_token_validation.py`: signature/expiry/scope validation coverage
 
 ## Run tests
