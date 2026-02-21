@@ -40,3 +40,42 @@ Related commits (short SHA):
 - Add policy version metadata handling and shadow-evaluation hooks.
 - Add integration tests covering request -> decision -> token -> mutation-gate sequence.
 
+## Session 2026-02-21
+
+Date: 2026-02-21
+
+Related commits (short SHA):
+- `0913ae5`
+- `b591232`
+
+### What changed
+- Added a governance-pack refactor plan to separate domain policy logic from the generic control-plane engine.
+- Defined target split: `src/core/` for orchestration and invariants, `src/domains/` for domain-specific rule packs.
+- Specified a `GovernanceModule` contract for policy versioning, required evidence, deterministic evaluation, and token scope mapping.
+- Defined extraction path for grants rules from `auditor.py` into `src/domains/grants/rules.py` behind a module adapter.
+- Added plan for a `mortgage_trid_respa` stub domain to prove module interchangeability without engine rewrites.
+- Added test strategy to validate shared engine invariants and domain-specific behavior independently.
+
+### Why it changed
+- Current grants-focused logic is correct but too coupled to a single policy domain.
+- Modular policy packs are required to support additional governance contexts (mortgage, HIPAA, legal/regulatory variants) safely.
+- The architecture must preserve existing invariants while allowing domain substitution at the rules layer.
+- Token authorization semantics need domain-aware scopes without changing core signing/validation mechanics.
+- Replay and audit correctness depend on stable, normalized decision-hash material across all domains.
+- Refactor sequencing is needed to reduce risk: behavior-preserving extraction first, then new domain introduction.
+
+### Design implications (control-plane impact)
+- Commit authority remains centralized in core token-gated controls; domain packs only supply deterministic policy evaluation.
+- The auditor becomes orchestration-only, improving maintainability and enabling explicit policy-pack loading per workflow.
+- Domain packs can evolve policy logic independently while retaining a consistent decision envelope for audit/replay.
+- Token payload should include `module_name`, `policy_version`, and `decision_hash` to prevent cross-context token reuse.
+- Cross-domain support becomes a configuration concern rather than a structural rewrite.
+- Invariant tests become the primary guardrail against regression during policy-pack expansion.
+
+### Next planned steps
+- Introduce `src/core/governance_module.py` with protocol/types for rule findings and decision results.
+- Refactor `src/auditor.py` into a generic orchestrator that delegates to a loaded governance module.
+- Extract grants rules into `src/domains/grants/` with module wrapper and policy metadata.
+- Add `src/domains/mortgage_trid_respa/` stub pack with minimal placeholder rules to validate interchangeability.
+- Update tests into `tests/core/` and `tests/domains/` with engine-invariant and per-domain coverage.
+- Extend token claim model to bind module and policy context explicitly during issuance/validation.
