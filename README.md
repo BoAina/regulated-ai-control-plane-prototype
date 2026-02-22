@@ -29,11 +29,13 @@ The prototype currently covers the first phase: safe intake and deterministic ga
 
 **Governance module interface** (`src/governance_module.py`) — A Protocol-based interface that lets domain-specific rule packs plug into the same evaluation engine. Defines `RuleFinding`, `DecisionResult`, and the `GovernanceModule` contract. This is what makes the architecture portable across domains.
 
-**Deterministic auditor** (`src/auditor.py`) — The core rule engine. Implements a `GrantsGovernanceModule` with deterministic rules for period validation, budget checks, allowability, documentation requirements, snapshot freshness, and high-dollar review thresholds. Routes every request to `APPROVE`, `REJECT`, or `REQUIRE_REVIEW`. Produces a decision hash for auditability.
+**Deterministic auditor** (`src/auditor.py`) — The orchestration layer. Delegates rule evaluation to a loaded governance module, computes decision hashes, and returns an `AuditorDecision` envelope. Domain-agnostic by design.
+
+**Grants governance pack** (`src/grants_governance.py`) — The first domain-specific rule pack. Implements deterministic rules for period validation, budget checks, allowability, documentation requirements, snapshot freshness, and high-dollar review thresholds. Routes every request to `APPROVE`, `REJECT`, or `REQUIRE_REVIEW`.
 
 **Token gateway** (`src/token_gateway.py`) — HMAC-SHA256 signed token issuance and validation. Tokens bind an approval decision to a specific request, transaction, policy version, and snapshot. They have scoped permissions, expiry windows, and are verified with constant-time comparison. No valid token, no mutation.
 
-**Tests** — 11 unit tests covering approval paths, rejection on disallowed codes, review routing for high-dollar transactions, stale snapshot rejection, token tampering, signature validation, expiry enforcement, and orchestrator consistency.
+**Tests** — 23 unit tests covering approval paths, rejection on disallowed codes, review routing for high-dollar transactions, stale snapshot rejection, token tampering, signature validation, expiry enforcement, orchestrator consistency, and full schema validation (missing fields, type coercion, value ranges, date formats).
 
 ## What's designed but not yet built
 
@@ -76,9 +78,12 @@ Hybrid design with clear trust boundaries:
 src/
   intent_schema.py        # IntentObject contract and validation
   governance_module.py     # GovernanceModule protocol and shared types
-  auditor.py               # Rule engine and grants governance module
+  auditor.py               # Orchestration engine and decision models
+  grants_governance.py     # Grants domain governance pack
   token_gateway.py         # Signed token issuance and validation
 tests/
+  conftest.py              # Shared test fixtures
+  test_intent_schema.py    # Schema validation coverage
   test_auditor_rules.py    # Policy rule evaluation coverage
   test_auditor_orchestration.py  # Orchestrator interface consistency
   test_token_validation.py       # Token security coverage
@@ -88,12 +93,20 @@ docs/
   DEV_LOG.md               # Development session log
   LEARNING_PYTHON.md       # Learning process documentation
 data/                      # Golden test cases (planned)
+pyproject.toml             # Project metadata and pytest config
+Makefile                   # Build targets (test, lint, clean)
 ```
 
 ## Run tests
 
 ```bash
-python3 -m unittest discover -s tests -p "test_*.py"
+python3 -m pytest tests/ -v
+```
+
+Or using the Makefile:
+
+```bash
+make test
 ```
 
 ## How this was built
