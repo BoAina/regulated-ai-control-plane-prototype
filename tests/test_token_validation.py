@@ -3,14 +3,10 @@
 from __future__ import annotations
 
 import json
-import sys
 import unittest
 from datetime import datetime, timedelta, timezone
-from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-
-from token_gateway import (  # noqa: E402
+from token_gateway import (
     TokenClaims,
     TokenValidationError,
     issue_token,
@@ -96,4 +92,3 @@ def _b64encode_for_test(value: bytes) -> str:
 
 if __name__ == "__main__":
     unittest.main()
-

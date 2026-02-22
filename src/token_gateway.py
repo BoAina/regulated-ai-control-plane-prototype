@@ -61,7 +61,7 @@ class TokenClaims:
 def issue_token(claims: TokenClaims, secret: str) -> str:
     """Issue a signed token from token claims."""
     if not secret:
-        raise ValueError("secret must not be empty")
+        raise TokenValidationError("secret must not be empty")
     payload_bytes = _serialize_claims(claims)
     signature = _sign(payload_bytes, secret)
     return f"{_b64url_encode(payload_bytes)}.{_b64url_encode(signature)}"
