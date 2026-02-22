@@ -4,9 +4,9 @@ Last updated: 2026-02-22
 
 ## Starting position
 
-You are not starting from zero. You have a decade of enterprise ERP implementation work, you understand regulated workflows, you know what audit trails and posting controls need to do. The domain knowledge is deep. The gap is implementation: Python syntax, type systems, standard library patterns, and the muscle memory of writing code rather than reading it.
+The domain knowledge is already there — a decade of ERP implementations in regulated industries, audit trails, posting controls, compliance workflows. What's missing is implementation fluency: Python syntax, type systems, standard library patterns, and the muscle memory of writing code instead of just reading it.
 
-This document is a personal discipline framework for closing that gap using the prototype as the learning vehicle. It is not a curriculum. It is a set of rules for making sure AI-assisted speed doesn't come at the cost of real comprehension.
+This document is a discipline framework for closing that gap using the prototype as the learning vehicle. Not a curriculum — just rules for making sure AI-assisted speed doesn't come at the cost of real comprehension.
 
 ## Core principle
 
