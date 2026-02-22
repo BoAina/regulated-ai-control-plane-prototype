@@ -96,6 +96,10 @@ data/                      # Golden test cases (planned)
 python3 -m unittest discover -s tests -p "test_*.py"
 ```
 
+## How this was built
+
+The initial scaffolding was generated with AI-assisted tooling (Codex), then hand-refactored module by module for understanding and ownership. The approach is deliberate: vibe code to get the shape right fast, then slow down, deconstruct every line, rewrite what I can't explain, and test what I can. The development session log (`docs/DEV_LOG.md`) tracks that process, and `docs/LEARNING_PYTHON.md` documents the learning discipline behind it.
+
 ## Background
 
 This prototype comes from a decade of enterprise ERP implementation work in regulated industries. The goal is not model training — it's building the governance layer that makes LLM systems safe enough for enterprise posting paths where compliance consequences are real and irreversible.
