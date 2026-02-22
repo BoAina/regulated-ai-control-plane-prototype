@@ -1,98 +1,136 @@
 # Learning Python (While Building the Prototype)
 
-Last updated: 2026-02-20
+Last updated: 2026-02-22
 
-## Core approach
+## Starting position
 
-Yes, it is fine to vibe-code first for momentum.  
-The key is to always follow with an explicit understanding pass.
+You are not starting from zero. You have a decade of enterprise ERP implementation work, you understand regulated workflows, you know what audit trails and posting controls need to do. The domain knowledge is deep. The gap is implementation: Python syntax, type systems, standard library patterns, and the muscle memory of writing code rather than reading it.
 
-Use this rule:
+This document is a personal discipline framework for closing that gap using the prototype as the learning vehicle. It is not a curriculum. It is a set of rules for making sure AI-assisted speed doesn't come at the cost of real comprehension.
 
-> Build fast first, then slow down and make sure you can explain every important part.
+## Core principle
+
+Vibe code to get the shape right fast. Then slow down, deconstruct every line, rewrite what you can't explain, and test what you can.
+
+The prototype was scaffolded with Codex and stabilized with Claude Code. That's the right workflow — but scaffolded code you can't modify under pressure is a liability, not an asset. The hand-refactor pass is where code becomes yours.
 
 ## The build-understand loop
 
-Run this loop for each small feature:
+Run this loop for each module or feature:
 
-1. Define one tiny outcome.
-- Examples: parse `IntentObject`, run one deterministic rule, write one audit event.
+1. **Define one tiny outcome.** Not "refactor the auditor" — more like "rewrite the budget check rule from scratch." Keep scope to one function or one test at a time.
 
-2. Vibe-code until it works.
-- Keep scope narrow and avoid jumping between many files.
+2. **Vibe-code until it works** (if building new). For refactoring existing code, read first, then rewrite without looking at the original.
 
-3. Explain it in your own words.
-- What data comes in?
-- What function transforms it?
-- What output is produced?
+3. **Explain the flow out loud.** What data comes in? What function transforms it? What does it return? If you can't answer all three without looking at the code, you don't own it yet.
 
-4. Rewrite one small part manually (no AI).
-- Rename variables.
-- Simplify branching.
-- Make function inputs/outputs explicit.
+4. **Rewrite one small part manually (no AI).** This is the part that builds real skill. Rename variables to names that make sense to you. Simplify branching. Make function signatures explicit. If the original used a Python pattern you don't recognize, look it up — don't just copy it.
 
-5. Add 1-2 tests.
-- One success case.
-- One failure/edge case.
+5. **Run the tests.** All 23 should still pass. If they don't, you changed behavior, not just style. Fix it before moving on.
 
-6. Keep only code you can explain tomorrow.
-- If it feels like mystery code, refactor until it makes sense.
+6. **Write down what you learned.** One sentence in the DEV_LOG. Not what you did — what you now understand that you didn't before.
 
-## Time split while learning
+## How to know if you own a module
 
-Recommended split:
+"Mystery code" is subjective. Use these concrete checks instead:
 
-- 60% building fast
-- 40% deconstructing, rewriting, and testing
+**You own it if you can:**
+- Explain what every function does without reading the code
+- Predict what happens when you change a specific line
+- Write a new test for an edge case without looking at existing tests
+- Modify a rule and have the right tests fail (not random ones)
+- Describe the module's job to a non-technical person in one sentence
 
-This keeps momentum without sacrificing real skill growth.
+**You don't own it yet if:**
+- You can read it and nod along but couldn't recreate the logic on a whiteboard
+- You're not sure which import does what
+- You'd need to re-read the function to answer "what happens if the input is missing a field?"
+- You skip a section thinking "I'll understand that later"
 
-## Non-negotiable guardrails
+## Time split (adapts as you progress)
 
-1. No mystery code in the final prototype.
-2. Every important function should have a one-line purpose statement.
-3. Every control-path module should have tests (especially rule evaluation and token checks).
-4. Refactor small and often; do not wait for a giant cleanup phase.
+The ratio should shift as your comfort grows:
+
+**Weeks 1-2 (read and follow):** 50% reading and explaining, 30% rewriting, 20% building new. You're mostly deconstructing Codex output right now. That's correct.
+
+**Weeks 3-4 (write with lookups):** 40% building new, 30% rewriting/refactoring, 30% testing and documenting. You should be writing new tests without AI help by this point.
+
+**Weeks 5+ (write confidently):** 60% building new, 20% testing, 20% refactoring old code you now see differently. The ratio flips because you're generating, not just consuming.
+
+If you're still at 50% reading after week 4, slow down and identify which specific patterns are blocking you. It's usually one of: dataclass construction, dictionary unpacking, or exception handling flow.
 
 ## Session template (90 minutes)
 
-1. 10 min: choose one tiny feature goal.
-2. 30 min: build it quickly.
-3. 20 min: explain and map the flow.
-4. 20 min: manual rewrite/refactor.
-5. 10 min: add tests and note what you learned.
+1. **10 min** — Pick one function or one test to own today. Write down what you think it does before reading it.
+2. **30 min** — Read it, run it, break it on purpose (change an input, remove a line), observe what happens.
+3. **20 min** — Rewrite it from memory. Don't look at the original. Get it wrong. Compare.
+4. **20 min** — Write one new test that the original author didn't write. Edge cases are best.
+5. **10 min** — Update DEV_LOG with what you learned. Run `make test` to confirm green.
 
-## Prototype-first learning order
+## Module refactor order
 
-Follow this sequence so learning maps directly to interview evidence:
+This sequence goes from simplest (no dependencies) to most complex (depends on everything else):
 
-1. Python basics for data handling
-- dicts/lists, loops, functions, modules, exceptions
+### 1. `intent_schema.py` — Start here
+- No imports from other project modules
+- Pure validation logic: dict in, IntentObject out, or error
+- 12 tests already exist — you'll know immediately if your rewrite works
+- **Key patterns to learn:** frozen dataclasses, isinstance checks, date parsing, raising custom exceptions
+- **Ownership test:** Write a 13th test for a case the existing suite doesn't cover
 
-2. API and JSON handling
-- request/response structure, schema validation, parsing
+### 2. `governance_module.py` — Short but conceptually important
+- 62 lines, mostly type definitions
+- This is where you learn what a Python Protocol is and why it's not an abstract base class
+- **Key patterns to learn:** Protocol, frozen dataclasses with tuple fields, to_dict serialization
+- **Ownership test:** Explain in one paragraph why this file exists separately from auditor.py
 
-3. Deterministic control logic
-- pure functions, rule evaluation, clear return types
+### 3. `grants_governance.py` — The domain logic you already understand
+- This is YOUR domain knowledge expressed in Python. You should be able to rewrite every rule because you know what grant period validation and budget checks actually mean
+- **Key patterns to learn:** method organization, building RuleFinding objects, decision routing logic
+- **Ownership test:** Add the missing R-ORG-006 (org unit authorization) rule from scratch, with tests
 
-4. Persistence and audit writes
-- insert/update flows, idempotency concepts
+### 4. `auditor.py` — Now just orchestration
+- After the stabilization pass, this is only ~100 lines
+- It instantiates a governance module and calls evaluate(). That's it.
+- **Key patterns to learn:** constructor injection, hash computation, the wrapper function pattern
+- **Ownership test:** Swap in a fake governance module that always returns REJECT and verify the auditor handles it correctly
 
-5. Testing
-- `pytest` unit tests for rules, contracts, and failure paths
+### 5. `token_gateway.py` — Save this for last
+- Cryptographic signing, base64url encoding, HMAC verification, constant-time comparison
+- This is the most "you need to understand every line" module because getting crypto wrong silently is worse than getting it wrong loudly
+- **Key patterns to learn:** hmac module, base64 encoding, timezone-aware datetimes, structured token formats
+- **Ownership test:** Explain why validate_token uses hmac.compare_digest instead of == comparison
 
 ## Weekly checkpoint questions
 
-Use these every week:
+Use these honestly. If the answer to any question is "not really," that's your priority for the next week.
 
-1. What can I now build without AI help?
-2. Which files still feel like black boxes?
-3. Which function did I rewrite manually this week?
-4. Which 3 tests prove my control plane is safer than last week?
-5. Can I explain the full request -> decision -> token -> post flow in 2 minutes?
+1. Which module can I now rewrite from scratch without AI or reference code?
+2. Which function would I be nervous to explain in an interview?
+3. What did I learn this week that changed how I read the rest of the codebase?
+4. Can I run the demo script (`docs/DEMO_SCRIPT.md`) and explain every step without notes?
+5. If a test fails tomorrow, can I diagnose it from the error message alone?
 
-## Progress signal that matters
+## Spaced review
 
-Progress is not “how much code I generated.”  
-Progress is “how much code I can explain, modify, and test confidently.”
+New code makes sense when you just wrote it. The real test is whether it still makes sense two weeks later.
 
+**Every two weeks:** Pick a module you refactored earlier. Read it cold, without context. If anything is unclear, refactor it again — your second pass will be better than your first because you've learned more since then.
+
+**Monthly:** Re-read this document itself. Your learning needs will shift. Update the time split ratios, adjust the module order if something clicked faster than expected, and add new ownership tests based on what you've built since.
+
+## External validation
+
+You don't have a mentor reviewing your code, but you have three feedback mechanisms:
+
+1. **The test suite.** 23 tests don't lie. If they pass after your rewrite, you preserved behavior. If they fail, you changed something you didn't intend to.
+
+2. **The demo script.** `docs/DEMO_SCRIPT.md` is a 10-15 minute walkthrough. If you can deliver it fluently and answer follow-up questions, you own the system. If you stumble on a section, that's the module to revisit.
+
+3. **The AI tools themselves.** After you hand-refactor a module, paste your version into Claude or ChatGPT and ask "what would you change about this code and why?" The suggestions you agree with are style improvements. The suggestions that surprise you are learning opportunities.
+
+## Progress signal
+
+Progress is not how much code you generated. Progress is not how many files you touched. Progress is: how much of this system can you explain, modify, debug, and extend without assistance?
+
+When the answer is "all of it," you're done learning and building at the same time.
