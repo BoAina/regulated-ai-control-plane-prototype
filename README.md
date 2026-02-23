@@ -115,4 +115,4 @@ The initial scaffolding was generated with AI-assisted tooling (Codex and Claude
 
 ## Background
 
-This prototype comes from a decade of enterprise ERP implementation work in regulated industries. The goal is not model training — it's building the governance layer that makes LLM systems safe enough for enterprise posting paths where compliance consequences are real and irreversible.
+This prototype comes from a decade of enterprise ERP implementation and solution consulting work in regulated industries. The goal is not model training,  it's building the governance layer that makes LLM systems safe enough for enterprise posting paths where compliance consequences are real and irreversible.
