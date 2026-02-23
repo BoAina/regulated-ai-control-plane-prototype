@@ -111,7 +111,7 @@ make test
 
 ## How this was built
 
-The initial scaffolding was generated with AI-assisted tooling (Codex), then hand-refactored module by module for understanding and ownership. The approach is deliberate: vibe code to get the shape right fast, then slow down, deconstruct every line, rewrite what I can't explain, and test what I can. The development session log (`docs/DEV_LOG.md`) tracks that process, and `docs/LEARNING_PYTHON.md` documents the learning discipline behind it.
+The initial scaffolding was generated with AI-assisted tooling (Codex and Claude Code), then hand-refactored module by module for understanding and ownership. The approach is deliberate: vibe code to get the shape right fast, then slow down, deconstruct every line, rewrite what I can't explain, and test what I can. The development session log (`docs/DEV_LOG.md`) tracks that process, and `docs/LEARNING_PYTHON.md` documents the learning discipline behind it.
 
 ## Background
 
