@@ -106,4 +106,3 @@ def validate_intent(payload: dict[str, Any]) -> IntentObject:
         risk_class=risk_class,
         rationale_summary=_required_string(payload, "rationale_summary"),
     )
-

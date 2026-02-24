@@ -5,7 +5,7 @@ from __future__ import annotations
 import unittest
 from datetime import date, timedelta
 
-from auditor import GrantSnapshot, evaluate_grant_intent
+from auditor import evaluate_grant_intent
 from grants_governance import DECISION_APPROVE, DECISION_REJECT, DECISION_REQUIRE_REVIEW
 from intent_schema import validate_intent
 

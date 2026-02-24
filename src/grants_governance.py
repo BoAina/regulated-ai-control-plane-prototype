@@ -42,7 +42,11 @@ class GrantsGovernanceModule(GovernanceModule):
                     severity="high",
                     message="Expense date falls outside active grant period.",
                     actual_value=intent.expense_date.isoformat(),
-                    expected_condition=f"{snapshot.grant_start_date.isoformat()} <= expense_date <= {snapshot.grant_end_date.isoformat()}",
+                    expected_condition=(
+                        f"{snapshot.grant_start_date.isoformat()}"
+                        f" <= expense_date <= "
+                        f"{snapshot.grant_end_date.isoformat()}"
+                    ),
                 )
             )
 

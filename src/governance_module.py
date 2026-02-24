@@ -59,4 +59,3 @@ class GovernanceModule(Protocol):
 
     def token_scope_for(self, *, intent: Any, decision: DecisionResult) -> list[str]:
         """Return token scopes that this module authorizes for an APPROVE decision."""
-

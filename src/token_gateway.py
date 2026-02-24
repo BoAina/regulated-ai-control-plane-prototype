@@ -9,7 +9,6 @@ import json
 import uuid
 from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta, timezone
-from typing import Any
 
 
 class TokenValidationError(ValueError):
@@ -124,4 +123,3 @@ def _b64url_decode(raw: str) -> bytes:
         return base64.urlsafe_b64decode(raw + pad)
     except (ValueError, base64.binascii.Error) as exc:
         raise TokenValidationError("token encoding is invalid") from exc
-

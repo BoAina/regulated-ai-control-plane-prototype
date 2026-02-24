@@ -8,7 +8,7 @@ from dataclasses import dataclass, field
 from datetime import date, datetime, timezone
 from typing import Any
 
-from governance_module import DecisionResult, GovernanceModule, RuleFinding
+from governance_module import GovernanceModule, RuleFinding
 from grants_governance import GrantsGovernanceModule
 from intent_schema import IntentObject
 

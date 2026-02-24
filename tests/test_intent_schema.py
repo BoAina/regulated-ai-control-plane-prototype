@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import unittest
-from datetime import date
 
 from intent_schema import IntentValidationError, IntentObject, validate_intent
 
