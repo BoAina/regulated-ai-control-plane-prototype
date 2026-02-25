@@ -1,4 +1,4 @@
-# Regulated AI Control Plane Prototype
+# Deterministic AI Control Plane 
 
 A working prototype of deterministic governance controls for probabilistic LLM systems in regulated industries. Starting with grants expenditure as the first domain, but the architecture is designed to be portable across any regulated workflow.
 
