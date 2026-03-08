@@ -90,7 +90,7 @@ Date: 2026-02-22
 - Added `pyproject.toml` with `pythonpath = ["src"]` for pytest, replacing the fragile `sys.path.insert()` hack in every test file.
 - Added `Makefile` with `test`, `lint`, and `clean` targets.
 - Created `tests/conftest.py` with shared `base_payload()` and `base_snapshot()` fixtures, removing identical copies from `test_auditor_rules.py` and `test_auditor_orchestration.py`.
-- Added `tests/test_intent_schema.py` with 11 tests covering all validation paths in `validate_intent()` — previously at zero coverage.
+- Added `tests/test_intent_schema.py` with 11 tests covering all validation paths in `validate_intent()` - previously at zero coverage.
 - Fixed `issue_token()` in `src/token_gateway.py` to raise `TokenValidationError` instead of a generic `ValueError` when given an empty secret.
 - Added typed `module: GovernanceModule` class attribute on `Auditor`.
 - Made `GrantsGovernanceModule` explicitly declare its `GovernanceModule` protocol in the class signature.

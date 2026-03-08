@@ -25,17 +25,17 @@ The system enforces six invariants:
 
 The prototype currently covers the first phase: safe intake and deterministic gating.
 
-**Schema validation** (`src/intent_schema.py`) — Strict `IntentObject` contract with field-level validation. The model must conform to this structure or the request fails. Enforces type constraints, value ranges, required fields, and immutability via frozen dataclasses.
+**Schema validation** (`src/intent_schema.py`) - Strict `IntentObject` contract with field-level validation. The model must conform to this structure or the request fails. Enforces type constraints, value ranges, required fields, and immutability via frozen dataclasses.
 
-**Governance module interface** (`src/governance_module.py`) — A Protocol-based interface that lets domain-specific rule packs plug into the same evaluation engine. Defines `RuleFinding`, `DecisionResult`, and the `GovernanceModule` contract. This is what makes the architecture portable across domains.
+**Governance module interface** (`src/governance_module.py`) - A Protocol-based interface that lets domain-specific rule packs plug into the same evaluation engine. Defines `RuleFinding`, `DecisionResult`, and the `GovernanceModule` contract. This is what makes the architecture portable across domains.
 
-**Deterministic auditor** (`src/auditor.py`) — The orchestration layer. Delegates rule evaluation to a loaded governance module, computes decision hashes, and returns an `AuditorDecision` envelope. Domain-agnostic by design.
+**Deterministic auditor** (`src/auditor.py`) - The orchestration layer. Delegates rule evaluation to a loaded governance module, computes decision hashes, and returns an `AuditorDecision` envelope. Domain-agnostic by design.
 
-**Grants governance pack** (`src/grants_governance.py`) — The first domain-specific rule pack. Implements deterministic rules for period validation, budget checks, allowability, documentation requirements, snapshot freshness, and high-dollar review thresholds. Routes every request to `APPROVE`, `REJECT`, or `REQUIRE_REVIEW`.
+**Grants governance pack** (`src/grants_governance.py`) - The first domain-specific rule pack. Implements deterministic rules for period validation, budget checks, allowability, documentation requirements, snapshot freshness, and high-dollar review thresholds. Routes every request to `APPROVE`, `REJECT`, or `REQUIRE_REVIEW`.
 
-**Token gateway** (`src/token_gateway.py`) — HMAC-SHA256 signed token issuance and validation. Tokens bind an approval decision to a specific request, transaction, policy version, and snapshot. They have scoped permissions, expiry windows, and are verified with constant-time comparison. No valid token, no mutation.
+**Token gateway** (`src/token_gateway.py`) - HMAC-SHA256 signed token issuance and validation. Tokens bind an approval decision to a specific request, transaction, policy version, and snapshot. They have scoped permissions, expiry windows, and are verified with constant-time comparison. No valid token, no mutation.
 
-**Tests** — 23 unit tests covering approval paths, rejection on disallowed codes, review routing for high-dollar transactions, stale snapshot rejection, token tampering, signature validation, expiry enforcement, orchestrator consistency, and full schema validation (missing fields, type coercion, value ranges, date formats).
+**Tests** - 23 unit tests covering approval paths, rejection on disallowed codes, review routing for high-dollar transactions, stale snapshot rejection, token tampering, signature validation, expiry enforcement, orchestrator consistency, and full schema validation (missing fields, type coercion, value ranges, date formats).
 
 ## What's designed but not yet built
 
@@ -52,16 +52,16 @@ The full specification is in `docs/PROTOTYPE_SPEC.md`. Planned phases include:
 
 ## Governance packs
 
-The control plane is domain-agnostic. Domain-specific policy logic is loaded as a governance pack — a pluggable module that provides rules, evidence requirements, scope mappings, and policy metadata. The engine evaluates any pack with the same orchestration, token binding, and audit semantics.
+The control plane is domain-agnostic. Domain-specific policy logic is loaded as a governance pack - a pluggable module that provides rules, evidence requirements, scope mappings, and policy metadata. The engine evaluates any pack with the same orchestration, token binding, and audit semantics.
 
 The first pack is grants expenditure, with rules covering:
 
-- `R-PERIOD-001` — expense date within grant period
-- `R-BUDGET-002` — amount within available budget
-- `R-ALLOW-003` — object code in approved categories
-- `R-DOC-004` — required evidence present
-- `R-SNAP-008` — snapshot freshness check
-- `R-THRESH-005` — high-dollar review routing
+- `R-PERIOD-001` - expense date within grant period
+- `R-BUDGET-002` - amount within available budget
+- `R-ALLOW-003` - object code in approved categories
+- `R-DOC-004` - required evidence present
+- `R-SNAP-008` - snapshot freshness check
+- `R-THRESH-005` - high-dollar review routing
 
 But the same engine handles other regulated domains by swapping the pack. Replace "grant period" with "coverage period" and "allowability" with "medical necessity" and you get claims adjudication. Replace grant rules with TRID/RESPA constraints and you get mortgage governance. Replace them with HIPAA access controls and you get PHI disclosure governance. One engine, many packs.
 
@@ -69,8 +69,8 @@ But the same engine handles other regulated domains by swapping the pack. Replac
 
 Hybrid design with clear trust boundaries:
 
-- **BigQuery** — Analytical read model representing ERP entities (grants, purchase orders, invoices, labor costs, allocations). Provides evaluation context and snapshot manifests. Does not grant commit authority.
-- **Postgres** — Authoritative transactional store for control-plane state: requests, decisions, review actions, tokens, idempotency keys, and the audit event chain.
+- **BigQuery** - Analytical read model representing ERP entities (grants, purchase orders, invoices, labor costs, allocations). Provides evaluation context and snapshot manifests. Does not grant commit authority.
+- **Postgres** - Authoritative transactional store for control-plane state: requests, decisions, review actions, tokens, idempotency keys, and the audit event chain.
 
 ## Repository layout
 
